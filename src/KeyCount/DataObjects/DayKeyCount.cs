@@ -8,7 +8,7 @@ namespace KeyCount.DataObjects
     /// Represents a day key count entry
     /// </summary>
     [Table("DayKeyCount")]
-    internal class DayKeyCount
+    public class DayKeyCount
     {
         /// <summary>
         /// Gets or sets the id of the entry

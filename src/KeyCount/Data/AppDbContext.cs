@@ -30,7 +30,7 @@ namespace KeyCount.Data
         /// </summary>
         public AppDbContext()
         {
-            _conString = $"Data Source = {Path.Combine(Helper.GetBaseDirPath(), "KeyCountDatabase.db")}";
+            _conString = $"Data Source={Path.Combine(Helper.GetBaseDirPath(), "KeyCountDatabase.db")}";
         }
 
         /// <summary>

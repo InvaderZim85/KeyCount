@@ -7,7 +7,7 @@ namespace KeyCount.DataObjects
     /// Represents a key entry
     /// </summary>
     [Table("KeyList")]
-    internal class KeyListEntry
+    public class KeyListEntry
     {
         /// <summary>
         /// Gets or sets the id of the entry

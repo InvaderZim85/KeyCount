@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
@@ -62,6 +63,18 @@ namespace KeyCount.Global
 
             instance.SetProgressState(TaskbarProgressBarState.Indeterminate);
             instance.SetProgressValue(current, max);
+        }
+
+        /// <summary>
+        /// Binds the values to the specified binding source
+        /// </summary>
+        /// <typeparam name="T">The type of the data</typeparam>
+        /// <param name="values">The values which should be bind to the specified source</param>
+        /// <param name="bindingSource">The binding source</param>
+        public static void BindToSource<T>(this IEnumerable<T> values, BindingSource bindingSource)
+        {
+            bindingSource.DataSource = null;
+            bindingSource.DataSource = values;
         }
     }
 }

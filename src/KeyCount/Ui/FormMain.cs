@@ -42,6 +42,54 @@ namespace KeyCount.Ui
         }
 
         /// <summary>
+        /// Shows the data
+        /// </summary>
+        private async void ShowData()
+        {
+            // Show the data
+            var percentage = 0d;
+            if (_previousCount > 0)
+                percentage = 100d / _previousCount * _todayCount;
+
+            Text = $"KeyCount - {DateTime.Now:dd.MM.yyyy} - {_todayCount:N0}";
+            textBoxCurrent.Text = percentage > 0
+                ? $"{_todayCount:N0} ({percentage:N2}%)"
+                : _todayCount.ToString("N0");
+
+            textBoxPrevious.Text = _previousCount.ToString("N0");
+
+            // Set the progress bar
+            if (_previousCount == 0 || _previousCount < _todayCount)
+            {
+                // Reset the progress bar, because we have no previous data
+                progressBar.Value = 0;
+            }
+            else
+            {
+                progressBar.Maximum = _previousCount;
+                progressBar.Value = _todayCount;
+            }
+
+            // Set the taskbar
+            Helper.SetTaskbarProgress(_previousCount, _todayCount);
+
+            // Load the stats
+            try
+            {
+                //var stats = await _manager.LoadStatsAsync();
+
+                //textBoxStatsMax.Text = stats.MaxKeyCount;
+                //textBoxStatsAverage.Text = stats.AverageKeyCount;
+                //textBoxMostUsedKey.Text = stats.MostUsedKey;
+                //textBoxLeastUsedKey.Text = stats.LeastUsedKey;
+            }
+            catch (Exception ex)
+            {
+                ex.ShowLogError();
+            }
+        }
+
+        /// <summary>
         /// Occurs when the form was loaded
         /// </summary>
         /// <param name="sender">The <see cref="FormMain"/></param>
@@ -50,6 +98,9 @@ namespace KeyCount.Ui
         {
             try
             {
+                // Set the start date
+                _startDate = DateTime.Now;
+
                 // Init the manager
                 await _manager.PrepareListAsync();
 
@@ -58,7 +109,8 @@ namespace KeyCount.Ui
                 // Start the hook
                 _hook.Start();
 
-                // Load the count of today
+                // Load the previous and the current count
+                _previousCount = await _manager.LoadPreviousCountAsync();
                 _todayCount = await _manager.LoadTodayCountAsync();
             }
             catch (Exception ex)
@@ -87,13 +139,59 @@ namespace KeyCount.Ui
                     _startDate = DateTime.Now;
                 }
 
+                // Update the current count
+                _todayCount++;
+
                 // Add the key...
                 await _manager.AddKeyAsync(e.KeyCode);
+
+                ShowData();
             }
             catch (Exception ex)
             {
                 Log.Error(ex, "Can't save key data.");
             }
+        }
+
+        /// <summary>
+        /// Occurs when the form is closing
+        /// </summary>
+        /// <param name="sender">The <see cref="FormMain"/></param>
+        /// <param name="e">The close event arguments</param>
+        private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            _hook.Stop();
+        }
+
+        /// <summary>
+        /// Occurs when the user hits the close button
+        /// </summary>
+        /// <param name="sender">The <see cref="buttonExit"/></param>
+        /// <param name="e">The event arguments</param>
+        private void buttonExit_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        /// <summary>
+        /// Occurs when the user hits the show data button
+        /// </summary>
+        /// <param name="sender">The <see cref="buttonShowData"/></param>
+        /// <param name="e">The event arguments</param>
+        private void buttonShowData_Click(object sender, EventArgs e)
+        {
+            var statsForm = new FormStats(_manager);
+            statsForm.ShowDialog();
+        }
+
+        /// <summary>
+        /// Occurs when the form was first shown
+        /// </summary>
+        /// <param name="sender">The <see cref="FormMain"/></param>
+        /// <param name="e">The event arguments</param>
+        private void FormMain_Shown(object sender, EventArgs e)
+        {
+            ShowData();
         }
     }
 }

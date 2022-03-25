@@ -71,7 +71,7 @@ namespace KeyCount.Business
                 if (lineContent.Length != 2)
                     continue;
 
-                if (Enum.TryParse(lineContent[0], out Keys keyCode))
+                if (!Enum.TryParse(lineContent[0], out Keys keyCode))
                     continue;
 
                 data.Add(new KeyListEntry

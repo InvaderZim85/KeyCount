@@ -5,7 +5,7 @@ namespace KeyCount.DataObjects.Import
     /// <summary>
     /// Represents a day count dto
     /// </summary>
-    internal class DayCountDto
+    public class DayCountDto
     {
         /// <summary>
         /// Gets or sets the date of the entry

@@ -80,8 +80,11 @@ namespace KeyCount.Ui
         /// Sets / shows the statistics
         /// </summary>
         /// <param name="stats">The statistics</param>
-        private void SetStats(StatsEntry stats)
+        private void SetStats(StatsEntry? stats)
         {
+            if (stats == null)
+                return;
+
             BeginInvoke((MethodInvoker)delegate
             {
                 groupBoxStatistics.Text = $"Statistics (last update: {DateTime.Now:dd.MM.yyyy HH:mm:ss}";

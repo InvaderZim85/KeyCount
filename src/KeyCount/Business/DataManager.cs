@@ -23,7 +23,7 @@ namespace KeyCount.Business
         /// <summary>
         /// Occurs when the stats are updated
         /// </summary>
-        public event EventHandler<StatsEntry>? StatsUpdated;
+        public event EventHandler<StatsEntry?>? StatsUpdated;
 
         /// <summary>
         /// The instance for the interaction with the database
@@ -158,8 +158,11 @@ namespace KeyCount.Business
         /// Loads the statistics
         /// </summary>
         /// <returns>The statistics</returns>
-        public async Task<StatsEntry> LoadStatsAsync()
+        public async Task<StatsEntry?> LoadStatsAsync()
         {
+            if (!_keyQueue.IsEmpty)
+                return null;
+
             var result = new StatsEntry();
 
             if (await _context.DayCounts.AnyAsync())

@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Linq;
 using System.Windows.Forms;
 using KeyCount.Business;
+using KeyCount.DataObjects;
 using KeyCount.Global;
 using Serilog;
 
@@ -44,7 +46,7 @@ namespace KeyCount.Ui
         /// <summary>
         /// Shows the data
         /// </summary>
-        private async void ShowData()
+        private void ShowData()
         {
             // Show the data
             var percentage = 0d;
@@ -72,21 +74,29 @@ namespace KeyCount.Ui
 
             // Set the taskbar
             Helper.SetTaskbarProgress(_previousCount, _todayCount);
+        }
 
-            // Load the stats
-            try
+        /// <summary>
+        /// Sets / shows the statistics
+        /// </summary>
+        /// <param name="stats">The statistics</param>
+        private void SetStats(StatsEntry stats)
+        {
+            BeginInvoke((MethodInvoker)delegate
             {
-                //var stats = await _manager.LoadStatsAsync();
+                groupBoxStatistics.Text = $"Statistics (last update: {DateTime.Now:dd.MM.yyyy HH:mm:ss}";
 
-                //textBoxStatsMax.Text = stats.MaxKeyCount;
-                //textBoxStatsAverage.Text = stats.AverageKeyCount;
-                //textBoxMostUsedKey.Text = stats.MostUsedKey;
-                //textBoxLeastUsedKey.Text = stats.LeastUsedKey;
-            }
-            catch (Exception ex)
-            {
-                ex.ShowLogError();
-            }
+                // Clear the controls
+                foreach (var textBox in groupBoxStatistics.Controls.OfType<TextBox>())
+                {
+                    textBox.Clear();
+                }
+
+                textBoxLeastUsedKey.Text = stats.LeastUsedKey;
+                textBoxMostUsedKey.Text = stats.MostUsedKey;
+                textBoxStatsAverage.Text = stats.AverageKeyCount;
+                textBoxStatsMax.Text = stats.MaxKeyCount;
+            });
         }
 
         /// <summary>
@@ -98,6 +108,15 @@ namespace KeyCount.Ui
         {
             try
             {
+                // Start the queue thread
+                _manager.Start();
+
+                // Add the stats event
+                _manager.StatsUpdated += (_, stats) =>
+                {
+                    SetStats(stats);
+                };
+
                 // Set the start date
                 _startDate = DateTime.Now;
 
@@ -112,6 +131,10 @@ namespace KeyCount.Ui
                 // Load the previous and the current count
                 _previousCount = await _manager.LoadPreviousCountAsync();
                 _todayCount = await _manager.LoadTodayCountAsync();
+
+                // Load the stats
+                var stats = await _manager.LoadStatsAsync();
+                SetStats(stats);
             }
             catch (Exception ex)
             {
@@ -125,7 +148,7 @@ namespace KeyCount.Ui
         /// <param name="sender">The sender (<see cref="_hook"/>)</param>
         /// <param name="e">The key</param>
         /// <exception cref="NotImplementedException"></exception>
-        private async void Hook_KeyUp(object? sender, KeyEventArgs e)
+        private void Hook_KeyUp(object? sender, KeyEventArgs e)
         {
             try
             {
@@ -143,7 +166,7 @@ namespace KeyCount.Ui
                 _todayCount++;
 
                 // Add the key...
-                await _manager.AddKeyAsync(e.KeyCode);
+                _manager.AddToQueue(e.KeyCode);
 
                 ShowData();
             }
@@ -161,6 +184,8 @@ namespace KeyCount.Ui
         private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
         {
             _hook.Stop();
+
+            _manager.Stop();
         }
 
         /// <summary>
@@ -168,7 +193,7 @@ namespace KeyCount.Ui
         /// </summary>
         /// <param name="sender">The <see cref="buttonExit"/></param>
         /// <param name="e">The event arguments</param>
-        private void buttonExit_Click(object sender, EventArgs e)
+        private void ButtonExit_Click(object sender, EventArgs e)
         {
             Close();
         }
@@ -178,7 +203,7 @@ namespace KeyCount.Ui
         /// </summary>
         /// <param name="sender">The <see cref="buttonShowData"/></param>
         /// <param name="e">The event arguments</param>
-        private void buttonShowData_Click(object sender, EventArgs e)
+        private void ButtonShowData_Click(object sender, EventArgs e)
         {
             var statsForm = new FormStats(_manager);
             statsForm.ShowDialog();

@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using KeyCount.Data;
@@ -9,6 +11,7 @@ using KeyCount.DataObjects;
 using KeyCount.DataObjects.Import;
 using Microsoft.EntityFrameworkCore;
 using ZimLabs.TableCreator;
+using Timer = System.Timers.Timer;
 
 namespace KeyCount.Business
 {
@@ -18,9 +21,34 @@ namespace KeyCount.Business
     public class DataManager
     {
         /// <summary>
+        /// Occurs when the stats are updated
+        /// </summary>
+        public event EventHandler<StatsEntry>? StatsUpdated;
+
+        /// <summary>
         /// The instance for the interaction with the database
         /// </summary>
         private readonly AppDbContext _context = new();
+
+        /// <summary>
+        /// The queue which contains the keys
+        /// </summary>
+        private readonly ConcurrentQueue<Keys> _keyQueue = new();
+
+        /// <summary>
+        /// The thread which consumes the <see cref="_keyQueue"/>
+        /// </summary>
+        private Thread? _queueThread;
+
+        /// <summary>
+        /// Contains the value which indicates if the stop was requested
+        /// </summary>
+        private bool _stopRequested;
+
+        /// <summary>
+        /// Contains the timer which updates the stats every minute
+        /// </summary>
+        private Timer? _statsTimer;
 
         /// <summary>
         /// Creates a new instance of the <see cref="DataManager"/>
@@ -30,6 +58,63 @@ namespace KeyCount.Business
             _context.Database.EnsureCreated();
         }
 
+        #region Queue / Timer
+        /// <summary>
+        /// Starts the queue consumer
+        /// </summary>
+        public void Start()
+        {
+            _queueThread = new Thread(ConsumeQueue);
+            _queueThread.Start();
+
+            _statsTimer = new Timer(TimeSpan.FromMinutes(1).TotalMilliseconds);
+            _statsTimer.Elapsed += async (_, _) =>
+            {
+                var stats = await LoadStatsAsync();
+                StatsUpdated?.Invoke(this, stats);
+            };
+
+            _statsTimer.Start();
+        }
+
+        /// <summary>
+        /// Stops the queue consumer
+        /// </summary>
+        public void Stop()
+        {
+            _stopRequested = true;
+            _statsTimer?.Stop();
+        }
+
+        /// <summary>
+        /// Adds the key to the queue
+        /// </summary>
+        /// <param name="key">The key which should be added to the queue</param>
+        public void AddToQueue(Keys key)
+        {
+            _keyQueue.Enqueue(key);
+        }
+
+        /// <summary>
+        /// Consumes the queue
+        /// </summary>
+        private async void ConsumeQueue()
+        {
+            while (!_stopRequested)
+            {
+                while (!_keyQueue.IsEmpty)
+                {
+                    while (_keyQueue.TryDequeue(out var entry))
+                        await AddKeyAsync(entry);
+                }
+
+                // Wait 500 milliseconds before the next try
+                Thread.Sleep(500); 
+            }
+        }
+        #endregion
+
+        #region Loading methods
         /// <summary>
         /// Loads the day list 
         /// </summary>
@@ -99,7 +184,9 @@ namespace KeyCount.Business
 
             return result;
         }
+        #endregion
 
+        #region Various
         /// <summary>
         /// Prepares the lists
         /// </summary>
@@ -131,7 +218,7 @@ namespace KeyCount.Business
         /// </summary>
         /// <param name="key"></param>
         /// <returns>The awaitable task</returns>
-        public async Task AddKeyAsync(Keys key)
+        private async Task AddKeyAsync(Keys key)
         {
             // Day count
             var today = await _context.DayCounts.FirstOrDefaultAsync(f => f.Day.Date == DateTime.Now.Date);
@@ -166,7 +253,9 @@ namespace KeyCount.Business
 
             await _context.SaveChangesAsync();
         }
+        #endregion
 
+        #region Import
         /// <summary>
         /// Imports a list of day key entries
         /// </summary>
@@ -220,6 +309,18 @@ namespace KeyCount.Business
             }
 
             await _context.SaveChangesAsync();
+        }
+        #endregion
+
+        /// <summary>
+        /// Finalizes the data manager (in case of some errors)
+        /// </summary>
+        ~DataManager()
+        {
+            if (_stopRequested)
+                return;
+
+            Stop();
         }
     }
 }

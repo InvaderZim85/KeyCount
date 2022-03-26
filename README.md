@@ -11,7 +11,3 @@ The main window:
 The stats window:
 
 ![stats](images/stats.png)
-
-## Known issues
-
-Currently there is a issue with the performance which causes a very hard "lag" of the keyboard input. I need to update the performance of the Sqlite functions.

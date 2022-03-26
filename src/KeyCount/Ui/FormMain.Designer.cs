@@ -119,7 +119,7 @@
             this.buttonExit.TabIndex = 6;
             this.buttonExit.Text = "Exit";
             this.buttonExit.UseVisualStyleBackColor = true;
-            this.buttonExit.Click += new System.EventHandler(this.buttonExit_Click);
+            this.buttonExit.Click += new System.EventHandler(this.ButtonExit_Click);
             // 
             // buttonShowData
             // 
@@ -130,7 +130,7 @@
             this.buttonShowData.TabIndex = 7;
             this.buttonShowData.Text = "Show data";
             this.buttonShowData.UseVisualStyleBackColor = true;
-            this.buttonShowData.Click += new System.EventHandler(this.buttonShowData_Click);
+            this.buttonShowData.Click += new System.EventHandler(this.ButtonShowData_Click);
             // 
             // checkBoxOnTop
             // 

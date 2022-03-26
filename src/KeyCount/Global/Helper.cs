@@ -57,7 +57,7 @@ namespace KeyCount.Global
 
             if (current > max)
             {
-                instance.SetProgressState(TaskbarProgressBarState.Normal); // Reset the progress
+                instance.SetProgressState(TaskbarProgressBarState.NoProgress); // Reset the progress
                 return;
             }
 

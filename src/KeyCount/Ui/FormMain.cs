@@ -85,21 +85,18 @@ namespace KeyCount.Ui
             if (stats == null)
                 return;
 
-            BeginInvoke((MethodInvoker)delegate
+            groupBoxStatistics.Text = $"Statistics (last update: {DateTime.Now:dd.MM.yyyy HH:mm:ss}";
+
+            // Clear the controls
+            foreach (var textBox in groupBoxStatistics.Controls.OfType<TextBox>())
             {
-                groupBoxStatistics.Text = $"Statistics (last update: {DateTime.Now:dd.MM.yyyy HH:mm:ss}";
+                textBox.Clear();
+            }
 
-                // Clear the controls
-                foreach (var textBox in groupBoxStatistics.Controls.OfType<TextBox>())
-                {
-                    textBox.Clear();
-                }
-
-                textBoxLeastUsedKey.Text = stats.LeastUsedKey;
-                textBoxMostUsedKey.Text = stats.MostUsedKey;
-                textBoxStatsAverage.Text = stats.AverageKeyCount;
-                textBoxStatsMax.Text = stats.MaxKeyCount;
-            });
+            textBoxLeastUsedKey.Text = stats.LeastUsedKey;
+            textBoxMostUsedKey.Text = stats.MostUsedKey;
+            textBoxStatsAverage.Text = stats.AverageKeyCount;
+            textBoxStatsMax.Text = stats.MaxKeyCount;
         }
 
         /// <summary>
@@ -113,12 +110,6 @@ namespace KeyCount.Ui
             {
                 // Start the queue thread
                 _manager.Start();
-
-                // Add the stats event
-                _manager.StatsUpdated += (_, stats) =>
-                {
-                    SetStats(stats);
-                };
 
                 // Set the start date
                 _startDate = DateTime.Now;
@@ -220,6 +211,34 @@ namespace KeyCount.Ui
         private void FormMain_Shown(object sender, EventArgs e)
         {
             ShowData();
+        }
+
+        /// <summary>
+        /// Occurs when the user changes the check state of the check box
+        /// </summary>
+        /// <param name="sender">The <see cref="checkBoxOnTop"/></param>
+        /// <param name="e">The event arguments</param>
+        private void checkBoxOnTop_CheckedChanged(object sender, EventArgs e)
+        {
+            TopMost = checkBoxOnTop.Checked;
+        }
+
+        /// <summary>
+        /// Occurs when the user hits the refresh button
+        /// </summary>
+        /// <param name="sender">The <see cref="buttonReloadStats"/></param>
+        /// <param name="e">The event arguments</param>
+        private async void buttonReloadStats_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var stats = await _manager.LoadStatsAsync();
+                SetStats(stats);
+            }
+            catch (Exception ex)
+            {
+                ex.ShowLogError();
+            }
         }
     }
 }

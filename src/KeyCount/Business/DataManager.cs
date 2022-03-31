@@ -21,11 +21,6 @@ namespace KeyCount.Business
     public class DataManager
     {
         /// <summary>
-        /// Occurs when the stats are updated
-        /// </summary>
-        public event EventHandler<StatsEntry?>? StatsUpdated;
-
-        /// <summary>
         /// The instance for the interaction with the database
         /// </summary>
         private readonly AppDbContext _context = new();
@@ -46,11 +41,6 @@ namespace KeyCount.Business
         private bool _stopRequested;
 
         /// <summary>
-        /// Contains the timer which updates the stats every minute
-        /// </summary>
-        private Timer? _statsTimer;
-
-        /// <summary>
         /// Creates a new instance of the <see cref="DataManager"/>
         /// </summary>
         public DataManager()
@@ -66,15 +56,6 @@ namespace KeyCount.Business
         {
             _queueThread = new Thread(ConsumeQueue);
             _queueThread.Start();
-
-            _statsTimer = new Timer(TimeSpan.FromMinutes(1).TotalMilliseconds);
-            _statsTimer.Elapsed += async (_, _) =>
-            {
-                var stats = await LoadStatsAsync();
-                StatsUpdated?.Invoke(this, stats);
-            };
-
-            _statsTimer.Start();
         }
 
         /// <summary>
@@ -83,7 +64,6 @@ namespace KeyCount.Business
         public void Stop()
         {
             _stopRequested = true;
-            _statsTimer?.Stop();
         }
 
         /// <summary>

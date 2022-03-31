@@ -49,6 +49,7 @@
             this.textBoxStatsMax = new System.Windows.Forms.TextBox();
             this.panelBottom = new System.Windows.Forms.Panel();
             this.groupBoxData = new System.Windows.Forms.GroupBox();
+            this.buttonReloadStats = new System.Windows.Forms.Button();
             this.groupBoxStatistics.SuspendLayout();
             this.panelBottom.SuspendLayout();
             this.groupBoxData.SuspendLayout();
@@ -142,6 +143,7 @@
             this.checkBoxOnTop.TabIndex = 8;
             this.checkBoxOnTop.Text = "Always on top";
             this.checkBoxOnTop.UseVisualStyleBackColor = true;
+            this.checkBoxOnTop.CheckedChanged += new System.EventHandler(this.checkBoxOnTop_CheckedChanged);
             // 
             // labelMax
             // 
@@ -165,7 +167,7 @@
             this.groupBoxStatistics.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBoxStatistics.Location = new System.Drawing.Point(5, 123);
             this.groupBoxStatistics.Name = "groupBoxStatistics";
-            this.groupBoxStatistics.Size = new System.Drawing.Size(354, 146);
+            this.groupBoxStatistics.Size = new System.Drawing.Size(354, 145);
             this.groupBoxStatistics.TabIndex = 10;
             this.groupBoxStatistics.TabStop = false;
             this.groupBoxStatistics.Text = "Statistics";
@@ -239,11 +241,12 @@
             // 
             // panelBottom
             // 
+            this.panelBottom.Controls.Add(this.buttonReloadStats);
             this.panelBottom.Controls.Add(this.buttonExit);
             this.panelBottom.Controls.Add(this.buttonShowData);
             this.panelBottom.Controls.Add(this.checkBoxOnTop);
             this.panelBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelBottom.Location = new System.Drawing.Point(5, 269);
+            this.panelBottom.Location = new System.Drawing.Point(5, 268);
             this.panelBottom.Name = "panelBottom";
             this.panelBottom.Size = new System.Drawing.Size(354, 36);
             this.panelBottom.TabIndex = 11;
@@ -264,11 +267,21 @@
             this.groupBoxData.TabStop = false;
             this.groupBoxData.Text = "Data";
             // 
+            // buttonReloadStats
+            // 
+            this.buttonReloadStats.Location = new System.Drawing.Point(114, 10);
+            this.buttonReloadStats.Name = "buttonReloadStats";
+            this.buttonReloadStats.Size = new System.Drawing.Size(75, 23);
+            this.buttonReloadStats.TabIndex = 9;
+            this.buttonReloadStats.Text = "Refresh";
+            this.buttonReloadStats.UseVisualStyleBackColor = true;
+            this.buttonReloadStats.Click += new System.EventHandler(this.buttonReloadStats_Click);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(364, 310);
+            this.ClientSize = new System.Drawing.Size(364, 309);
             this.Controls.Add(this.groupBoxStatistics);
             this.Controls.Add(this.groupBoxData);
             this.Controls.Add(this.panelBottom);
@@ -312,5 +325,6 @@
         private System.Windows.Forms.Label labelMostUsedKey;
         private System.Windows.Forms.TextBox textBoxLeastUsedKey;
         private System.Windows.Forms.TextBox textBoxMostUsedKey;
+        private System.Windows.Forms.Button buttonReloadStats;
     }
 }

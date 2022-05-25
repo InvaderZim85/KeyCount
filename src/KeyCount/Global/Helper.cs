@@ -6,75 +6,74 @@ using System.Windows.Forms;
 using Microsoft.WindowsAPICodePack.Taskbar;
 using Serilog;
 
-namespace KeyCount.Global
+namespace KeyCount.Global;
+
+/// <summary>
+/// Provides several helper functions
+/// </summary>
+internal static class Helper
 {
     /// <summary>
-    /// Provides several helper functions
+    /// Gets the path of the base directory
     /// </summary>
-    internal static class Helper
+    /// <returns>The path of the base directory</returns>
+    public static string GetBaseDirPath()
     {
-        /// <summary>
-        /// Gets the path of the base directory
-        /// </summary>
-        /// <returns>The path of the base directory</returns>
-        public static string GetBaseDirPath()
+        var assemblyPath = Assembly.GetExecutingAssembly().Location;
+        return Path.GetDirectoryName(assemblyPath) ?? "";
+    }
+
+    /// <summary>
+    /// Init the logger
+    /// </summary>
+    public static void InitLogger()
+    {
+        Log.Logger = new LoggerConfiguration().WriteTo.File("log.txt", rollingInterval: RollingInterval.Day,
+                outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level:u3}] {Message:lj}{NewLine}{Exception}")
+            .CreateLogger();
+    }
+
+    /// <summary>
+    /// Shows a message box with the error information and logs the error
+    /// </summary>
+    /// <param name="ex">The exception</param>
+    public static void ShowLogError(this Exception ex)
+    {
+        MessageBox.Show("An error has occurred. For more information see log.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); 
+        Log.Error(ex, "");
+    }
+
+    /// <summary>
+    /// Sets the taskbar progress
+    /// </summary>
+    /// <param name="max">The max value</param>
+    /// <param name="current">The current value</param>
+    public static void SetTaskbarProgress(int max, int current)
+    {
+        if (!TaskbarManager.IsPlatformSupported)
+            return;
+
+        var instance = TaskbarManager.Instance;
+
+        if (current > max)
         {
-            var assemblyPath = Assembly.GetExecutingAssembly().Location;
-            return Path.GetDirectoryName(assemblyPath) ?? "";
+            instance.SetProgressState(TaskbarProgressBarState.NoProgress); // Reset the progress
+            return;
         }
 
-        /// <summary>
-        /// Init the logger
-        /// </summary>
-        public static void InitLogger()
-        {
-            Log.Logger = new LoggerConfiguration().WriteTo.File("log.txt", rollingInterval: RollingInterval.Day,
-                    outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level:u3}] {Message:lj}{NewLine}{Exception}")
-                .CreateLogger();
-        }
+        instance.SetProgressState(TaskbarProgressBarState.Indeterminate);
+        instance.SetProgressValue(current, max);
+    }
 
-        /// <summary>
-        /// Shows a message box with the error information and logs the error
-        /// </summary>
-        /// <param name="ex">The exception</param>
-        public static void ShowLogError(this Exception ex)
-        {
-            MessageBox.Show("An error has occurred. For more information see log.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); 
-            Log.Error(ex, "");
-        }
-
-        /// <summary>
-        /// Sets the taskbar progress
-        /// </summary>
-        /// <param name="max">The max value</param>
-        /// <param name="current">The current value</param>
-        public static void SetTaskbarProgress(int max, int current)
-        {
-            if (!TaskbarManager.IsPlatformSupported)
-                return;
-
-            var instance = TaskbarManager.Instance;
-
-            if (current > max)
-            {
-                instance.SetProgressState(TaskbarProgressBarState.NoProgress); // Reset the progress
-                return;
-            }
-
-            instance.SetProgressState(TaskbarProgressBarState.Indeterminate);
-            instance.SetProgressValue(current, max);
-        }
-
-        /// <summary>
-        /// Binds the values to the specified binding source
-        /// </summary>
-        /// <typeparam name="T">The type of the data</typeparam>
-        /// <param name="values">The values which should be bind to the specified source</param>
-        /// <param name="bindingSource">The binding source</param>
-        public static void BindToSource<T>(this IEnumerable<T> values, BindingSource bindingSource)
-        {
-            bindingSource.DataSource = null;
-            bindingSource.DataSource = values;
-        }
+    /// <summary>
+    /// Binds the values to the specified binding source
+    /// </summary>
+    /// <typeparam name="T">The type of the data</typeparam>
+    /// <param name="values">The values which should be bind to the specified source</param>
+    /// <param name="bindingSource">The binding source</param>
+    public static void BindToSource<T>(this IEnumerable<T> values, BindingSource bindingSource)
+    {
+        bindingSource.DataSource = null;
+        bindingSource.DataSource = values;
     }
 }

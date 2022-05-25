@@ -4,37 +4,36 @@ using KeyCount.Global;
 using KeyCount.Ui;
 using Serilog;
 
-namespace KeyCount
+namespace KeyCount;
+
+/// <summary>
+/// Provides the main logic of the program
+/// </summary>
+internal static class Program
 {
     /// <summary>
-    /// Provides the main logic of the program
+    ///  The main entry point for the application.
     /// </summary>
-    internal static class Program
+    [STAThread]
+    private static void Main()
     {
-        /// <summary>
-        ///  The main entry point for the application.
-        /// </summary>
-        [STAThread]
-        private static void Main()
-        {
-            Helper.InitLogger();
+        Helper.InitLogger();
 
-            try
-            {
-                Application.SetHighDpiMode(HighDpiMode.SystemAware);
-                Application.EnableVisualStyles();
-                Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run(new FormMain());
-            }
-            catch (Exception ex)
-            {
-                ex.ShowLogError();
-            }
-            finally
-            {
-                Log.CloseAndFlush();
-            }
-            
+        try
+        {
+            Application.SetHighDpiMode(HighDpiMode.SystemAware);
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new FormMain());
         }
+        catch (Exception ex)
+        {
+            ex.ShowLogError();
+        }
+        finally
+        {
+            Log.CloseAndFlush();
+        }
+            
     }
 }

@@ -143,7 +143,7 @@
             this.checkBoxOnTop.TabIndex = 8;
             this.checkBoxOnTop.Text = "Always on top";
             this.checkBoxOnTop.UseVisualStyleBackColor = true;
-            this.checkBoxOnTop.CheckedChanged += new System.EventHandler(this.checkBoxOnTop_CheckedChanged);
+            this.checkBoxOnTop.CheckedChanged += new System.EventHandler(this.CheckBoxOnTop_CheckedChanged);
             // 
             // labelMax
             // 
@@ -275,7 +275,7 @@
             this.buttonReloadStats.TabIndex = 9;
             this.buttonReloadStats.Text = "Refresh";
             this.buttonReloadStats.UseVisualStyleBackColor = true;
-            this.buttonReloadStats.Click += new System.EventHandler(this.buttonReloadStats_Click);
+            this.buttonReloadStats.Click += new System.EventHandler(this.ButtonReloadStats_Click);
             // 
             // FormMain
             // 

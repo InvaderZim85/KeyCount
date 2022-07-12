@@ -150,9 +150,11 @@ namespace KeyCount.Business
                 var maxEntry = await _context.DayCounts.AsNoTracking().OrderByDescending(o => o.Count)
                     .FirstOrDefaultAsync();
                 var average = await _context.DayCounts.AsNoTracking().AverageAsync(a => a.Count);
+                var total = await _context.DayCounts.AsNoTracking().SumAsync(s => s.Count);
 
                 result.MaxKeyCount = $"{maxEntry.Count:N0} - {maxEntry.Day:dd.MM.yyyy}";
                 result.AverageKeyCount = average.ToString("N0");
+                result.TotalKeyCount = total.ToString("N0");
             }
 
             if (await _context.KeyList.AnyAsync())

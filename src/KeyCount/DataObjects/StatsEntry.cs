@@ -6,6 +6,11 @@
     public class StatsEntry
     {
         /// <summary>
+        /// Gets or sets the total key count
+        /// </summary>
+        public string TotalKeyCount { get; set; } = "";
+        
+        /// <summary>
         /// Gets or sets the maximal key count
         /// </summary>
         public string MaxKeyCount { get; set; } = "";

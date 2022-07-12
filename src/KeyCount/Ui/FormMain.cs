@@ -85,7 +85,7 @@ namespace KeyCount.Ui
             if (stats == null)
                 return;
 
-            groupBoxStatistics.Text = $"Statistics (last update: {DateTime.Now:dd.MM.yyyy HH:mm:ss}";
+            groupBoxStatistics.Text = $"Statistics (last update: {DateTime.Now:dd.MM.yyyy HH:mm:ss})";
 
             // Clear the controls
             foreach (var textBox in groupBoxStatistics.Controls.OfType<TextBox>())
@@ -93,6 +93,7 @@ namespace KeyCount.Ui
                 textBox.Clear();
             }
 
+            textBoxStatsTotal.Text = stats.TotalKeyCount;
             textBoxLeastUsedKey.Text = stats.LeastUsedKey;
             textBoxMostUsedKey.Text = stats.MostUsedKey;
             textBoxStatsAverage.Text = stats.AverageKeyCount;

@@ -48,8 +48,10 @@
             this.labelAverage = new System.Windows.Forms.Label();
             this.textBoxStatsMax = new System.Windows.Forms.TextBox();
             this.panelBottom = new System.Windows.Forms.Panel();
-            this.groupBoxData = new System.Windows.Forms.GroupBox();
             this.buttonReloadStats = new System.Windows.Forms.Button();
+            this.groupBoxData = new System.Windows.Forms.GroupBox();
+            this.textBoxStatsTotal = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.groupBoxStatistics.SuspendLayout();
             this.panelBottom.SuspendLayout();
             this.groupBoxData.SuspendLayout();
@@ -148,7 +150,7 @@
             // labelMax
             // 
             this.labelMax.AutoSize = true;
-            this.labelMax.Location = new System.Drawing.Point(6, 25);
+            this.labelMax.Location = new System.Drawing.Point(6, 56);
             this.labelMax.Name = "labelMax";
             this.labelMax.Size = new System.Drawing.Size(97, 15);
             this.labelMax.TabIndex = 9;
@@ -156,6 +158,8 @@
             // 
             // groupBoxStatistics
             // 
+            this.groupBoxStatistics.Controls.Add(this.label1);
+            this.groupBoxStatistics.Controls.Add(this.textBoxStatsTotal);
             this.groupBoxStatistics.Controls.Add(this.labelLeastUsedKey);
             this.groupBoxStatistics.Controls.Add(this.labelMostUsedKey);
             this.groupBoxStatistics.Controls.Add(this.textBoxLeastUsedKey);
@@ -167,7 +171,7 @@
             this.groupBoxStatistics.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBoxStatistics.Location = new System.Drawing.Point(5, 123);
             this.groupBoxStatistics.Name = "groupBoxStatistics";
-            this.groupBoxStatistics.Size = new System.Drawing.Size(354, 145);
+            this.groupBoxStatistics.Size = new System.Drawing.Size(354, 176);
             this.groupBoxStatistics.TabIndex = 10;
             this.groupBoxStatistics.TabStop = false;
             this.groupBoxStatistics.Text = "Statistics";
@@ -175,7 +179,7 @@
             // labelLeastUsedKey
             // 
             this.labelLeastUsedKey.AutoSize = true;
-            this.labelLeastUsedKey.Location = new System.Drawing.Point(17, 112);
+            this.labelLeastUsedKey.Location = new System.Drawing.Point(17, 143);
             this.labelLeastUsedKey.Name = "labelLeastUsedKey";
             this.labelLeastUsedKey.Size = new System.Drawing.Size(86, 15);
             this.labelLeastUsedKey.TabIndex = 16;
@@ -184,7 +188,7 @@
             // labelMostUsedKey
             // 
             this.labelMostUsedKey.AutoSize = true;
-            this.labelMostUsedKey.Location = new System.Drawing.Point(17, 83);
+            this.labelMostUsedKey.Location = new System.Drawing.Point(17, 114);
             this.labelMostUsedKey.Name = "labelMostUsedKey";
             this.labelMostUsedKey.Size = new System.Drawing.Size(86, 15);
             this.labelMostUsedKey.TabIndex = 15;
@@ -194,7 +198,7 @@
             // 
             this.textBoxLeastUsedKey.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxLeastUsedKey.Location = new System.Drawing.Point(109, 109);
+            this.textBoxLeastUsedKey.Location = new System.Drawing.Point(109, 140);
             this.textBoxLeastUsedKey.Name = "textBoxLeastUsedKey";
             this.textBoxLeastUsedKey.ReadOnly = true;
             this.textBoxLeastUsedKey.Size = new System.Drawing.Size(239, 23);
@@ -204,7 +208,7 @@
             // 
             this.textBoxMostUsedKey.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxMostUsedKey.Location = new System.Drawing.Point(109, 80);
+            this.textBoxMostUsedKey.Location = new System.Drawing.Point(109, 111);
             this.textBoxMostUsedKey.Name = "textBoxMostUsedKey";
             this.textBoxMostUsedKey.ReadOnly = true;
             this.textBoxMostUsedKey.Size = new System.Drawing.Size(239, 23);
@@ -214,7 +218,7 @@
             // 
             this.textBoxStatsAverage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxStatsAverage.Location = new System.Drawing.Point(109, 51);
+            this.textBoxStatsAverage.Location = new System.Drawing.Point(109, 82);
             this.textBoxStatsAverage.Name = "textBoxStatsAverage";
             this.textBoxStatsAverage.ReadOnly = true;
             this.textBoxStatsAverage.Size = new System.Drawing.Size(239, 23);
@@ -223,7 +227,7 @@
             // labelAverage
             // 
             this.labelAverage.AutoSize = true;
-            this.labelAverage.Location = new System.Drawing.Point(6, 54);
+            this.labelAverage.Location = new System.Drawing.Point(6, 85);
             this.labelAverage.Name = "labelAverage";
             this.labelAverage.Size = new System.Drawing.Size(95, 15);
             this.labelAverage.TabIndex = 11;
@@ -233,7 +237,7 @@
             // 
             this.textBoxStatsMax.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxStatsMax.Location = new System.Drawing.Point(109, 22);
+            this.textBoxStatsMax.Location = new System.Drawing.Point(109, 53);
             this.textBoxStatsMax.Name = "textBoxStatsMax";
             this.textBoxStatsMax.ReadOnly = true;
             this.textBoxStatsMax.Size = new System.Drawing.Size(239, 23);
@@ -246,10 +250,20 @@
             this.panelBottom.Controls.Add(this.buttonShowData);
             this.panelBottom.Controls.Add(this.checkBoxOnTop);
             this.panelBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelBottom.Location = new System.Drawing.Point(5, 268);
+            this.panelBottom.Location = new System.Drawing.Point(5, 299);
             this.panelBottom.Name = "panelBottom";
             this.panelBottom.Size = new System.Drawing.Size(354, 36);
             this.panelBottom.TabIndex = 11;
+            // 
+            // buttonReloadStats
+            // 
+            this.buttonReloadStats.Location = new System.Drawing.Point(114, 10);
+            this.buttonReloadStats.Name = "buttonReloadStats";
+            this.buttonReloadStats.Size = new System.Drawing.Size(75, 23);
+            this.buttonReloadStats.TabIndex = 9;
+            this.buttonReloadStats.Text = "Refresh";
+            this.buttonReloadStats.UseVisualStyleBackColor = true;
+            this.buttonReloadStats.Click += new System.EventHandler(this.buttonReloadStats_Click);
             // 
             // groupBoxData
             // 
@@ -267,21 +281,30 @@
             this.groupBoxData.TabStop = false;
             this.groupBoxData.Text = "Data";
             // 
-            // buttonReloadStats
+            // textBoxStatsTotal
             // 
-            this.buttonReloadStats.Location = new System.Drawing.Point(114, 10);
-            this.buttonReloadStats.Name = "buttonReloadStats";
-            this.buttonReloadStats.Size = new System.Drawing.Size(75, 23);
-            this.buttonReloadStats.TabIndex = 9;
-            this.buttonReloadStats.Text = "Refresh";
-            this.buttonReloadStats.UseVisualStyleBackColor = true;
-            this.buttonReloadStats.Click += new System.EventHandler(this.buttonReloadStats_Click);
+            this.textBoxStatsTotal.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxStatsTotal.Location = new System.Drawing.Point(109, 22);
+            this.textBoxStatsTotal.Name = "textBoxStatsTotal";
+            this.textBoxStatsTotal.ReadOnly = true;
+            this.textBoxStatsTotal.Size = new System.Drawing.Size(239, 23);
+            this.textBoxStatsTotal.TabIndex = 17;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(7, 25);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(96, 15);
+            this.label1.TabIndex = 18;
+            this.label1.Text = "Total key strokes:";
             // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(364, 309);
+            this.ClientSize = new System.Drawing.Size(364, 340);
             this.Controls.Add(this.groupBoxStatistics);
             this.Controls.Add(this.groupBoxData);
             this.Controls.Add(this.panelBottom);
@@ -326,5 +349,7 @@
         private System.Windows.Forms.TextBox textBoxLeastUsedKey;
         private System.Windows.Forms.TextBox textBoxMostUsedKey;
         private System.Windows.Forms.Button buttonReloadStats;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox textBoxStatsTotal;
     }
 }

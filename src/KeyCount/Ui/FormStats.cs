@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 using KeyCount.Business;
 using KeyCount.DataObjects;
@@ -122,10 +121,10 @@ namespace KeyCount.Ui
             {
                 switch (keyList)
                 {
-                    case true when sourceKeyList.DataSource is List<KeyListEntry> keyListValues:
+                    case true when sourceKeyList.DataSource is SortableBindingList<KeyListEntry> keyListValues:
                         keyListValues.SaveTable(dialog.FileName, OutputType.Csv);
                         break;
-                    case false when sourceKeyCount.DataSource is List<DayKeyCount> dayListValues:
+                    case false when sourceKeyCount.DataSource is SortableBindingList<DayKeyCount> dayListValues:
                         dayListValues.SaveTable(dialog.FileName, OutputType.Csv);
                         break;
                 }

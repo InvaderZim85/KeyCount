@@ -74,7 +74,7 @@ namespace KeyCount.Global
         public static void BindToSource<T>(this IEnumerable<T> values, BindingSource bindingSource)
         {
             bindingSource.DataSource = null;
-            bindingSource.DataSource = values;
+            bindingSource.DataSource = new SortableBindingList<T>(values);
         }
     }
 }

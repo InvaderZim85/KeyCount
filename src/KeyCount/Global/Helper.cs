@@ -6,8 +6,8 @@ using System.Windows.Forms;
 using Microsoft.WindowsAPICodePack.Taskbar;
 using Serilog;
 
-namespace KeyCount.Global
-{
+namespace KeyCount.Global;
+
     /// <summary>
     /// Provides several helper functions
     /// </summary>
@@ -76,5 +76,4 @@ namespace KeyCount.Global
             bindingSource.DataSource = null;
             bindingSource.DataSource = new SortableBindingList<T>(values);
         }
-    }
 }

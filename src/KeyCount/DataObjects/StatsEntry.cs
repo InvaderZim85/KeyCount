@@ -1,5 +1,5 @@
-﻿namespace KeyCount.DataObjects
-{
+﻿namespace KeyCount.DataObjects;
+
     /// <summary>
     /// Provides some statistics
     /// </summary>
@@ -29,5 +29,4 @@
         /// Gets or sets the least used key
         /// </summary>
         public string LeastUsedKey { get; set; } = "";
-    }
 }
